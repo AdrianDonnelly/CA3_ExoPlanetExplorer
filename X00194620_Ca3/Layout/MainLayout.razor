@@ -1,76 +1,38 @@
 ﻿@inherits LayoutComponentBase
-@* Required *@
-<MudThemeProvider />
-<MudPopoverProvider />
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-@* Needed for dialogs *@
-<MudDialogProvider />
+<MudLayout>
 
-@* Needed for snackbars *@
-<MudSnackbarProvider />
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu"
+                       Color="Color.Inherit"
+                       Edge="Edge.Start"
+                       OnClick="@((e) => DrawerToggle())" />
 
-<div class="page">
-    <MudThemeProvider />
+        <MudSpacer />
+        <MudText Typo="Typo.h5">Exo-Planet Explorer</MudText>
+        <MudSpacer />
 
-    <MudLayout>
-        <MudAppBar Elevation="1">
-            <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
-            <MudSpacer/>
-            <MudText Typo="Typo.h5" Class="mt-1">Exo-Planet Explorer</MudText>
-            <MudSpacer/>
-            <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End"/>
+        <MudIconButton Icon="@Icons.Material.Filled.MoreVert"
+                       Color="Color.Inherit"
+                       Edge="Edge.End" />
+    </MudAppBar>
 
-        </MudAppBar>
-        <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
-            <MudDrawerHeader>
-                <MudText Typo="Typo.h5" Class="mt-1">Applications</MudText>
-            </MudDrawerHeader>
-        </MudDrawer>
-        <MudMainContent>
-            
-            <MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
-                <MudGrid>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="4">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudGrid>
-                            <MudItem xs="12">
-                                <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                            </MudItem>
-                            <MudItem xs="12">
-                                <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                            </MudItem>
-                        </MudGrid>
-                    </MudItem>
-                    <MudItem xs="12" sm="6">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 100%"></MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="6" md="4">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                    </MudItem>
-                    <MudItem xs="12" sm="12" md="4">
-                        <MudPaper Elevation="2" Class="pa-4" Style="height: 200px;"></MudPaper>
-                    </MudItem>
-                </MudGrid>
-            </MudContainer>
-        </MudMainContent>
-    </MudLayout>
-    @code {
-        bool _drawerOpen = true;
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5">Applications</MudText>
+        </MudDrawerHeader>
+    </MudDrawer>
 
-        void DrawerToggle()
-        {
-            _drawerOpen = !_drawerOpen;
-        }
-    }
-</div>
+    <MudMainContent>
+        @Body   @* THIS is where your pages get injected *@
+    </MudMainContent>
+
+</MudLayout>
+
+@code {
+    bool _drawerOpen = true;
+    void DrawerToggle() => _drawerOpen = !_drawerOpen;
+}
