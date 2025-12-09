@@ -13,7 +13,6 @@ public partial class LaunchDetails : ComponentBase
     private Launch? launch;
     private bool loading = true;
     
-    // Image dialog state
     private bool imageDialogOpen = false;
     private string selectedImageUrl = string.Empty;
     private DialogOptions dialogOptions = new() { MaxWidth = MaxWidth.Large, FullWidth = true };

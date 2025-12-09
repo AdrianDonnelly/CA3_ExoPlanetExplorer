@@ -17,7 +17,6 @@
     }
     else
     {
-        <!-- Filter Controls -->
         <MudPaper Class="pa-4 mb-4" Elevation="1">
             <MudGrid Spacing="2">
                 <MudItem xs="12" md="8">
@@ -40,12 +39,10 @@
             </MudGrid>
         </MudPaper>
 
-        <!-- Photo Count -->
         <MudText Typo="Typo.body1" Class="mb-3" Color="Color.Primary">
             Showing @FilteredPhotos.Count photo(s) from @FilteredPhotos.Select(p => p.LaunchName).Distinct().Count() mission(s)
         </MudText>
 
-        <!-- Photo Grid -->
         <MudGrid Spacing="3">
             @foreach (var photo in PagedPhotos)
             {
@@ -74,7 +71,6 @@
             }
         </MudGrid>
 
-        <!-- Pagination -->
         @if (TotalPages > 1)
         {
             <div class="d-flex justify-center mt-6">
@@ -90,7 +86,6 @@
     }
 </MudContainer>
 
-<!-- Image Dialog -->
 @if (imageDialogOpen && selectedPhoto != null)
 {
     <MudOverlay Visible="true" DarkBackground="true" ZIndex="9999" OnClick="@CloseImageDialog">

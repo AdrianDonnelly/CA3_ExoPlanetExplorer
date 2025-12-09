@@ -9,18 +9,15 @@
         SpaceX Launch Timeline
     </MudText>
 
-    @if (loading)
-    {
-        <MudProgressCircular Indeterminate="true" />
+    @if (loading){
+        <MudProgressCircular Indeterminate="true"/>
     }
     else if (launches is not null){
         <MudGrid Spacing="3">
-            <!-- Left Sidebar - Filters -->
             <MudItem xs="12" md="3">
                 <MudPaper Class="pa-4" Elevation="2" Style="position: sticky; top: 20px;">
                     <MudText Typo="Typo.h6" Class="mb-3">Filters</MudText>
-                    
-                    <!-- Search -->
+
                     <MudTextField @bind-Value="SearchText"
                                   Placeholder="Search mission..."
                                   Adornment="Adornment.Start"
@@ -32,10 +29,9 @@
 
                     <MudDivider Class="mb-3"/>
 
-                    <!-- Status Filter -->
                     <MudText Typo="Typo.subtitle2" Class="mb-2">Status</MudText>
-                    <MudSelect T="string" 
-                               @bind-Value="SelectedStatus" 
+                    <MudSelect T="string"
+                               @bind-Value="SelectedStatus"
                                Variant="Variant.Outlined"
                                Margin="Margin.Dense"
                                Class="mb-3">
@@ -47,17 +43,16 @@
 
                     <MudDivider Class="mb-3"/>
 
-                    <!-- Sort Order -->
                     <MudText Typo="Typo.subtitle2" Class="mb-2">Sort By Date</MudText>
                     <MudButtonGroup FullWidth="true" Size="Size.Small" Class="mb-3">
-                        <MudButton OnClick="@(() => SetSortOrder(SortOrder.Ascending))" 
+                        <MudButton OnClick="@(() => SetSortOrder(SortOrder.Ascending))"
                                    Variant="@(sortOrder == SortOrder.Ascending ? Variant.Filled : Variant.Outlined)"
                                    Color="@(sortOrder == SortOrder.Ascending ? Color.Primary : Color.Default)"
                                    StartIcon="@Icons.Material.Filled.ArrowUpward"
                                    Size="Size.Small">
                             Oldest
                         </MudButton>
-                        <MudButton OnClick="@(() => SetSortOrder(SortOrder.Descending))" 
+                        <MudButton OnClick="@(() => SetSortOrder(SortOrder.Descending))"
                                    Variant="@(sortOrder == SortOrder.Descending ? Variant.Filled : Variant.Outlined)"
                                    Color="@(sortOrder == SortOrder.Descending ? Color.Primary : Color.Default)"
                                    StartIcon="@Icons.Material.Filled.ArrowDownward"
@@ -68,104 +63,100 @@
 
                     <MudDivider Class="mb-3"/>
 
-                    <!-- Date Range -->
                     <MudText Typo="Typo.subtitle2" Class="mb-2">Date Range</MudText>
-                    <MudDatePicker @bind-Date="FromDate" 
-                                   Label="From Date" 
+                    <MudDatePicker @bind-Date="FromDate"
+                                   Label="From Date"
                                    Variant="Variant.Outlined"
                                    Margin="Margin.Dense"
                                    Editable="true"
-                                   Class="mb-2" />
-                    <MudDatePicker @bind-Date="ToDate" 
-                                   Label="To Date" 
+                                   Class="mb-2"/>
+                    <MudDatePicker @bind-Date="ToDate"
+                                   Label="To Date"
                                    Variant="Variant.Outlined"
                                    Margin="Margin.Dense"
                                    Editable="true"
-                                   Class="mb-3" />
+                                   Class="mb-3"/>
 
                     <MudDivider Class="mb-3"/>
 
-                    <!-- Advanced Filters -->
                     <MudText Typo="Typo.subtitle2" Class="mb-2">Advanced Filters</MudText>
-                    
-                    <MudCheckBox @bind-Value="HasPressKit" 
-                                 Label="Has Press Kit" 
+
+                    <MudCheckBox @bind-Value="HasPressKit"
+                                 Label="Has Press Kit"
                                  Dense="true"
-                                 Color="Color.Primary" />
-                    
-                    <MudCheckBox @bind-Value="HasPhotos" 
-                                 Label="Has Photos" 
+                                 Color="Color.Primary"/>
+
+                    <MudCheckBox @bind-Value="HasPhotos"
+                                 Label="Has Photos"
                                  Dense="true"
-                                 Color="Color.Primary" />
-                    
-                    <MudCheckBox @bind-Value="HasWebcast" 
-                                 Label="Has Webcast" 
+                                 Color="Color.Primary"/>
+
+                    <MudCheckBox @bind-Value="HasWebcast"
+                                 Label="Has Webcast"
                                  Dense="true"
-                                 Color="Color.Primary" />
-                    
-                    <MudCheckBox @bind-Value="HasArticle" 
-                                 Label="Has Article" 
+                                 Color="Color.Primary"/>
+
+                    <MudCheckBox @bind-Value="HasArticle"
+                                 Label="Has Article"
                                  Dense="true"
                                  Color="Color.Primary"
-                                 Class="mb-3" />
+                                 Class="mb-3"/>
 
                     <MudDivider Class="mb-3"/>
 
-                    <!-- Clear Button -->
-                    <MudButton Variant="Variant.Outlined" 
-                               OnClick="ClearFilters" 
+                    <MudButton Variant="Variant.Outlined"
+                               OnClick="ClearFilters"
                                StartIcon="@Icons.Material.Filled.Clear"
                                Color="Color.Default"
                                FullWidth="true">
                         Clear All Filters
                     </MudButton>
 
-                    <!-- Results Count -->
                     <MudText Typo="Typo.caption" Color="Color.Secondary" Class="mt-3">
                         @TotalItems result(s) found
                     </MudText>
                 </MudPaper>
             </MudItem>
 
-            <!-- Right Content - Launch List -->
             <MudItem xs="12" md="9">
                 <MudList T="object" Dense="true">
-                    @foreach (var launch in PagedLaunches)
-        {
-            <MudPaper Class="d-flex align-center mb-2 p-3"
-                      Style="cursor:pointer"
-                      Elevation="1"
-                      @onclick="() => OpenLaunch(launch.Id)">
+                    @foreach (var launch in PagedLaunches){
+                        <MudPaper Class="d-flex align-center mb-2 p-3"
+                                  Style="cursor:pointer"
+                                  Elevation="1"
+                                  @onclick="() => OpenLaunch(launch.Id)">
 
-                <img src="@(launch.Links?.Patch?.Small ?? "/images/default-patch.png")"
-                     alt="@(launch.Name ?? "Mission") Patch"
-                     style="width:64px; height:64px; object-fit:contain; margin-right:12px;" />
+                            <img src="@(launch.Links?.Patch?.Small ?? "/images/default-patch.png")"
+                                 alt="@(launch.Name ?? "Mission") Patch"
+                                 style="width:64px; height:64px; object-fit:contain; margin-right:12px;"/>
 
 
-                <div class="flex-grow-1">
-                    <b>@(launch.Name ?? "Unknown Mission")</b><br/>
-                    @(launch.DateUtc?.ToLocalTime().ToString("dd MMM yyyy") ?? "Unknown Date")
-                    
-                </div>
+                            <div class="flex-grow-1">
+                                <b>@(launch.Name ?? "Unknown Mission")</b><br/>
+                                @(launch.DateUtc?.ToLocalTime().ToString("dd MMM yyyy") ?? "Unknown Date")
 
-                <MudChip
-                    Color="@StatusColor(launch.Success)"
-                    Text="@StatusText(launch.Success)"
-                    Variant="Variant.Filled"/>
-            </MudPaper>
-        }
+                            </div>
+
+                            <MudChip
+                                Color="@StatusColor(launch.Success)"
+                                Text="@StatusText(launch.Success)"
+                                Variant="Variant.Filled"/>
+                        </MudPaper>
+                    }
                 </MudList>
 
-                            @if (TotalItems > 0)
-                {
+                @if (TotalItems > 0){
                     <div class="d-flex flex-column align-center mt-3">
-                        <MudPagination 
+                        <MudPagination
                             Count="@TotalPages"
                             Selected="@currentPage"
-                            SelectedChanged="@((int page) => { currentPage = page; InvokeAsync(StateHasChanged); })"
+                            SelectedChanged="@((int page) => {
+                                                 currentPage = page;
+                                                 InvokeAsync(StateHasChanged);
+                                             })"
                             ShowFirstButton="true"
                             ShowLastButton="true"
-                            Class="mt-4 mb-10" />
+                            Class="mt-4 mb-10"/>
                     </div>
                 }
             </MudItem>

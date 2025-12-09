@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using X00194620_Ca3.Services;
 
 namespace X00194620_Ca3.Pages;
@@ -69,8 +68,7 @@ public partial class LaunchPhotos : ComponentBase{
             return query.OrderByDescending(p => p.LaunchDate ?? DateTime.MinValue).ToList();
         }
     }
-
-
+    
     private void ClearSearch(){
         SearchText = string.Empty;
         currentPage = 1;

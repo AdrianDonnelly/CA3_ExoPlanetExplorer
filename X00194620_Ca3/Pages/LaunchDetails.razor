@@ -4,27 +4,22 @@
 <PageTitle>@(launch?.Name ?? "Launch Details")</PageTitle>
 
 <MudContainer Class="mt-8">
-    @if (loading)
-    {
-        <MudProgressCircular Indeterminate="true" />
+    @if (loading){
+        <MudProgressCircular Indeterminate="true"/>
     }
-    else if (launch == null)
-    {
+    else if (launch == null){
         <MudAlert Severity="Severity.Error">Launch not found</MudAlert>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/" Class="mt-4">
             Back to Home
         </MudButton>
     }
-    else
-    {
-        <!-- Header with back button -->
+    else{
         <div class="d-flex align-center mb-4">
             <MudButton Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBack" Href="/">
                 Back to Launches
             </MudButton>
         </div>
 
-        <!-- Mission Name and Status -->
         <div class="d-flex align-center mb-4">
             <MudText Typo="Typo.h3" Class="flex-grow-1">@launch.Name</MudText>
             <MudChip T="string" Color="@StatusColor" Variant="Variant.Filled" Size="Size.Large">
@@ -32,21 +27,17 @@
             </MudChip>
         </div>
 
-        <!-- Main Content Grid -->
         <MudGrid>
-            <!-- Left Column - Mission Patch and Basic Info -->
             <MudItem xs="12" md="4">
                 <MudPaper Class="pa-4 mb-4">
                     <MudText Typo="Typo.h6" Class="mb-3">Mission Patch</MudText>
-                    @if (!string.IsNullOrWhiteSpace(launch.Links?.Patch?.Large))
-                    {
-                        <MudImage Src="@launch.Links.Patch.Large" 
-                                  Alt="@($"{launch.Name} Patch")" 
+                    @if (!string.IsNullOrWhiteSpace(launch.Links?.Patch?.Large)){
+                        <MudImage Src="@launch.Links.Patch.Large"
+                                  Alt="@($"{launch.Name} Patch")"
                                   Class="rounded-lg"
-                                  Style="width: 100%; max-width: 300px; height: auto;" />
+                                  Style="width: 100%; max-width: 300px; height: auto;"/>
                     }
-                    else
-                    {
+                    else{
                         <MudText Color="Color.Secondary">No mission patch available</MudText>
                     }
                 </MudPaper>
@@ -63,7 +54,7 @@
                                 @(launch.DateUtc?.ToLocalTime().ToString("hh:mm tt") ?? "")
                             </MudText>
                         </MudListItem>
-                        
+
                         <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle">
                             <MudText Typo="Typo.body2" Color="Color.Secondary">Status</MudText>
                             <MudText Typo="Typo.body1">@StatusText</MudText>
@@ -77,94 +68,82 @@
                 </MudPaper>
             </MudItem>
 
-            <!-- Right Column - Links and Media -->
             <MudItem xs="12" md="8">
-                <!-- Links Section -->
                 <MudPaper Class="pa-4 mb-4">
                     <MudText Typo="Typo.h6" Class="mb-3">Links & Resources</MudText>
                     <div class="d-flex flex-wrap" style="gap: 12px;">
-                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Webcast))
-                        {
-                            <MudButton Variant="Variant.Filled" 
-                                       Color="Color.Error" 
+                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Webcast)){
+                            <MudButton Variant="Variant.Filled"
+                                       Color="Color.Error"
                                        StartIcon="@Icons.Material.Filled.PlayArrow"
-                                       Href="@launch.Links.Webcast" 
+                                       Href="@launch.Links.Webcast"
                                        Target="_blank">
                                 Watch Webcast
                             </MudButton>
                         }
-                        
-                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Article))
-                        {
-                            <MudButton Variant="Variant.Outlined" 
-                                       Color="Color.Primary" 
+
+                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Article)){
+                            <MudButton Variant="Variant.Outlined"
+                                       Color="Color.Primary"
                                        StartIcon="@Icons.Material.Filled.Article"
-                                       Href="@launch.Links.Article" 
+                                       Href="@launch.Links.Article"
                                        Target="_blank">
                                 Read Article
                             </MudButton>
                         }
-                        
-                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Wikipedia))
-                        {
-                            <MudButton Variant="Variant.Outlined" 
-                                       Color="Color.Primary" 
+
+                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Wikipedia)){
+                            <MudButton Variant="Variant.Outlined"
+                                       Color="Color.Primary"
                                        StartIcon="@Icons.Material.Filled.MenuBook"
-                                       Href="@launch.Links.Wikipedia" 
+                                       Href="@launch.Links.Wikipedia"
                                        Target="_blank">
                                 Wikipedia
                             </MudButton>
                         }
-                        
-                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Presskit))
-                        {
-                            <MudButton Variant="Variant.Outlined" 
-                                       Color="Color.Primary" 
+
+                        @if (!string.IsNullOrWhiteSpace(launch.Links?.Presskit)){
+                            <MudButton Variant="Variant.Outlined"
+                                       Color="Color.Primary"
                                        StartIcon="@Icons.Material.Filled.Description"
-                                       Href="@launch.Links.Presskit" 
+                                       Href="@launch.Links.Presskit"
                                        Target="_blank">
                                 Press Kit
                             </MudButton>
                         }
                     </div>
-                    
-                    @if (string.IsNullOrWhiteSpace(launch.Links?.Webcast) && 
-                         string.IsNullOrWhiteSpace(launch.Links?.Article) && 
-                         string.IsNullOrWhiteSpace(launch.Links?.Wikipedia) && 
-                         string.IsNullOrWhiteSpace(launch.Links?.Presskit))
-                    {
+
+                    @if (string.IsNullOrWhiteSpace(launch.Links?.Webcast) &&
+                         string.IsNullOrWhiteSpace(launch.Links?.Article) &&
+                         string.IsNullOrWhiteSpace(launch.Links?.Wikipedia) &&
+                         string.IsNullOrWhiteSpace(launch.Links?.Presskit)){
                         <MudText Color="Color.Secondary" Class="mt-2">No external links available</MudText>
                     }
                 </MudPaper>
 
-                <!-- Flickr Images Section -->
-                @if (launch.Links?.Flickr?.Original?.Any() == true)
-                {
+                @if (launch.Links?.Flickr?.Original?.Any() == true){
                     <MudPaper Class="pa-4">
                         <MudText Typo="Typo.h6" Class="mb-3">Launch Photos</MudText>
                         <MudGrid Spacing="2">
-                            @foreach (var imageUrl in launch.Links.Flickr.Original.Take(6))
-                            {
+                            @foreach (var imageUrl in launch.Links.Flickr.Original.Take(6)){
                                 <MudItem xs="12" sm="6" md="4">
-                                    <MudImage Src="@imageUrl" 
-                                              Alt="Launch photo" 
+                                    <MudImage Src="@imageUrl"
+                                              Alt="Launch photo"
                                               Class="rounded-lg"
                                               ObjectFit="ObjectFit.Cover"
                                               Style="width: 100%; height: 200px; cursor: pointer;"
-                                              @onclick="() => OpenImageDialog(imageUrl)" />
+                                              @onclick="() => OpenImageDialog(imageUrl)"/>
                                 </MudItem>
                             }
                         </MudGrid>
-                        @if (launch.Links.Flickr.Original.Count > 6)
-                        {
+                        @if (launch.Links.Flickr.Original.Count > 6){
                             <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-2">
                                 Showing 6 of @launch.Links.Flickr.Original.Count images
                             </MudText>
                         }
                     </MudPaper>
                 }
-                else
-                {
+                else{
                     <MudPaper Class="pa-4">
                         <MudText Typo="Typo.h6" Class="mb-3">Launch Photos</MudText>
                         <MudText Color="Color.Secondary">No photos available for this launch</MudText>
@@ -175,13 +154,12 @@
     }
 </MudContainer>
 
-<!-- Image Dialog -->
 <MudDialog @bind-IsVisible="imageDialogOpen" Options="dialogOptions">
     <TitleContent>
         <MudText Typo="Typo.h6">Launch Photo</MudText>
     </TitleContent>
     <DialogContent>
-        <MudImage Src="@selectedImageUrl" Alt="Launch photo" Style="width: 100%; height: auto;" />
+        <MudImage Src="@selectedImageUrl" Alt="Launch photo" Style="width: 100%; height: auto;"/>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="CloseImageDialog">Close</MudButton>
