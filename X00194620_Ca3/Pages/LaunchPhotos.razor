@@ -41,7 +41,7 @@
         </MudPaper>
 
         <!-- Photo Count -->
-        <MudText Typo="Typo.body1" Class="mb-3" Color="Color.Secondary">
+        <MudText Typo="Typo.body1" Class="mb-3" Color="Color.Primary">
             Showing @FilteredPhotos.Count photo(s) from @FilteredPhotos.Select(p => p.LaunchName).Distinct().Count() mission(s)
         </MudText>
 
@@ -57,7 +57,7 @@
                                       @onclick="() => OpenImageDialog(photo)" />
                         <MudCardContent>
                             <MudText Typo="Typo.body2" Class="font-weight-bold">@photo.LaunchName</MudText>
-                            <MudText Typo="Typo.caption" Color="Color.Secondary">
+                            <MudText Typo="Typo.caption" Color="Color.Primary">
                                 @photo.LaunchDate?.ToString("MMM dd, yyyy")
                             </MudText>
                         </MudCardContent>
@@ -104,8 +104,8 @@
                 <MudImage Src="@selectedPhoto.ImageUrl" 
                           Alt="@selectedPhoto.LaunchName" 
                           Style="width: 100%; height: auto; max-height: 70vh; object-fit: contain;" />
-                <MudText Typo="Typo.body2" Color="Color.Secondary" Class="mt-3">
-                    @selectedPhoto.LaunchDate?.ToString("MMMM dd, yyyy") ?? "Unknown date"
+                <MudText Typo="Typo.body2" Color="Color.Primary" Class="mt-3">
+                    @selectedPhoto.LaunchDate?.ToString("MMMM dd, yyyy")
                 </MudText>
             </div>
             

@@ -28,13 +28,12 @@
         <MudSpacer/>
 
         <!-- Dark Mode Toggle -->
-        <MudSwitch @bind-Value="_isDarkMode" Color="Color.Dark" Class="ma-4" T="bool"/>
-
-
-        <!-- More Menu -->
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert"
-                       Color="Color.Inherit"
-                       Edge="Edge.End"/>
+        <MudTooltip Text="Toggle Dark Mode">
+            <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.DarkMode : Icons.Material.Filled.LightMode)"
+                           Color="Color.Inherit"
+                           Edge="Edge.End"
+                           OnClick="@(() => _isDarkMode = !_isDarkMode)"/>
+        </MudTooltip>
     </MudAppBar>
 
     <!-- SIDE DRAWER -->
@@ -50,6 +49,10 @@
 
             <MudNavLink Href="/photos" Icon="@Icons.Material.Filled.PhotoLibrary">
                 Launch Photos
+            </MudNavLink>
+
+            <MudNavLink Href="/statistics" Icon="@Icons.Material.Filled.BarChart">
+                Statistics
             </MudNavLink>
             
         </MudDrawerContainer>
