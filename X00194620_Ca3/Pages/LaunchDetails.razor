@@ -46,7 +46,7 @@
                     <MudText Typo="Typo.h6" Class="mb-3">Quick Info</MudText>
                     <MudList T="string" Dense="true">
                         <MudListItem T="string" Icon="@Icons.Material.Filled.Event">
-                            <MudText Typo="Typo.body2" Color="Color.Secondary">Launch Date</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Primary">Launch Date</MudText>
                             <MudText Typo="Typo.body1">
                                 @(launch.DateUtc?.ToLocalTime().ToString("MMMM dd, yyyy") ?? "Unknown")
                             </MudText>
@@ -56,12 +56,12 @@
                         </MudListItem>
 
                         <MudListItem T="string" Icon="@Icons.Material.Filled.CheckCircle">
-                            <MudText Typo="Typo.body2" Color="Color.Secondary">Status</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Primary">Status</MudText>
                             <MudText Typo="Typo.body1">@StatusText</MudText>
                         </MudListItem>
 
                         <MudListItem T="string" Icon="@Icons.Material.Filled.Tag">
-                            <MudText Typo="Typo.body2" Color="Color.Secondary">Launch ID</MudText>
+                            <MudText Typo="Typo.body2" Color="Color.Primary">Launch ID</MudText>
                             <MudText Typo="Typo.body1" Style="font-family: monospace;">@launch.Id</MudText>
                         </MudListItem>
                     </MudList>
