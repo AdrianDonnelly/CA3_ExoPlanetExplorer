@@ -15,53 +15,176 @@
     {
         <MudProgressCircular Indeterminate="true" />
     }
-    else if (launches is not null)
-    {
-        <MudList T="object" Dense="true">
-            @foreach (var launch in launches){
-                <MudPaper Class="d-flex align-center mb-2 p-3"
-                          Style="cursor:pointer"
-                          Elevation="1"
-                          @onclick="() => OpenLaunch(launch.Id)">
+    else if (launches is not null){
+        <!-- Search and filters -->
+        <div class="d-flex mb-4 align-center" style="gap:12px;">
+            <MudTextField @bind-Value="SearchText"
+                          Placeholder="Search mission..."
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Immediate="true"
+                          Class="flex-grow-1"/>
 
-                    <img src="@launch.Links.Patch.Small"
-                         alt="@launch.Name Patch"
-                         style="width: 50%; height: 50%; object-fit: scale-down;"
-                         onerror="this.onerror=null; this.src='/images/default-patch.png';" />
+            <MudSelect T="string" @bind-Value="SelectedStatus" Label="Status" Style="min-width:140px;">
+                <MudSelectItem Value='@("All")'>All</MudSelectItem>
+                <MudSelectItem Value='@("Success")'>Success</MudSelectItem>
+                <MudSelectItem Value='@("Failed")'>Failed</MudSelectItem>
+                <MudSelectItem Value='@("Unknown")'>Unknown</MudSelectItem>
+            </MudSelect>
+
+            <MudButton Variant="Variant.Outlined" OnClick="ClearFilters">Clear</MudButton>
+        </div>
+    }
+
+    <MudList T="object" Dense="true">
+        @foreach (var launch in PagedLaunches)
+        {
+            <MudPaper Class="d-flex align-center mb-2 p-3"
+                      Style="cursor:pointer"
+                      Elevation="1"
+                      @onclick="() => OpenLaunch(launch.Id)">
+
+                <!-- smaller fixed-size patch image with safe null handling -->
+                <img src="@(launch.Links?.Patch?.Small ?? "/images/default-patch.png")"
+                     alt="@(launch.Name ?? "Mission") Patch"
+                     style="width:64px; height:64px; object-fit:contain; margin-right:12px;" />
 
 
-                    <div class="flex-grow-1">
-                        <b>@(launch.Name ?? "Unknown Mission")</b><br/>
-                        @(launch.DateUtc?.ToLocalTime().ToString("dd MMM yyyy") ?? "Unknown Date")
+                <div class="flex-grow-1">
+                    <b>@(launch.Name ?? "Unknown Mission")</b><br/>
+                    @(launch.DateUtc?.ToLocalTime().ToString("dd MMM yyyy") ?? "Unknown Date")
 
-                        <!-- DEBUG: show the image URL as plain text -->
-                        <div style="font-size: 10px; color: grey;">
-                            Patch: @launch.Links?.Patch?.Small
-                        </div>
+                    <!-- DEBUG: show the image URL as plain text -->
+                    <div style="font-size: 10px; color: grey;">
+                        Patch: @launch.Links?.Patch?.Small
                     </div>
+                </div>
 
-                    <MudChip
-                        Color="@StatusColor(launch.Success)"
-                        Text="@StatusText(launch.Success)"
-                        Variant="Variant.Filled"/>
-                </MudPaper>
-            }
-            s
+                <MudChip
+                    Color="@StatusColor(launch.Success)"
+                    Text="@StatusText(launch.Success)"
+                    Variant="Variant.Filled"/>
+            </MudPaper>
+        }
+    </MudList>
 
-        </MudList>
+    @if (TotalItems > 0)
+    {
+        <div class="d-flex flex-column align-center mt-3">
+            <MudPagination 
+                Count="@TotalPages"
+                Selected="@currentPage"
+                SelectedChanged="@((int page) => { currentPage = page; InvokeAsync(StateHasChanged); })"
+                ShowFirstButton="true"
+                ShowLastButton="true"
+                Class="mt-4" />
+        </div>
     }
 
 </MudContainer>
 
+        
 @code {
     private List<Launch>? launches;
     private bool loading = true;
 
+    // Filters (backing fields)
+    private string searchText = string.Empty;
+    private string selectedStatus = "All";
+
+    // Pagination
+    private int currentPage = 1;
+    private int pageSize = 10;
+
+    // Exposed bindable properties for fields so changing filters resets page
+    private string SearchText
+    
+    {
+        get => searchText;
+        set
+        {
+            if (searchText == value) return;
+            searchText = value;
+            currentPage = 1; // reset page when searching
+        }
+    }
+
+    private string SelectedStatus
+    {
+        
+        get => selectedStatus;
+        set
+        {
+            if (selectedStatus == value) return;
+            selectedStatus = value;
+            currentPage = 1; // reset page when changing status
+        }
+    }
+
     protected override async Task OnInitializedAsync()
     {
         launches = await SpaceX.GetLaunchesAsync();
-        launches = launches.OrderBy(x => x.DateUtc).ToList();
+        // keep original list unsorted here; FilteredLaunches will order results
         loading = false;
+    }
+
+    private List<Launch> FilteredLaunches
+    {
+        get
+        {
+            if (launches is null) return new List<Launch>();
+
+            var query = launches.AsEnumerable();
+
+            // text search (name)
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                var lower = SearchText.Trim().ToLowerInvariant();
+                query = query.Where(l => (l.Name ?? string.Empty).ToLowerInvariant().Contains(lower));
+            }
+
+            // status filter
+            query = SelectedStatus switch
+            {
+                "Success" => query.Where(l => l.Success == true),
+                "Failed" => query.Where(l => l.Success == false),
+                "Unknown" => query.Where(l => l.Success == null),
+                _ => query
+            };
+
+            // final ordering - return as List to avoid multiple enumerations
+            return query.OrderBy(x => x.DateUtc ?? DateTime.MinValue).ToList();
+        }
+    }
+
+    private int TotalItems => FilteredLaunches.Count;
+    private int TotalPages => Math.Max(1, (int)Math.Ceiling(TotalItems / (double)pageSize));
+    private List<Launch> PagedLaunches => FilteredLaunches.Skip((currentPage - 1) * pageSize).Take(pageSize).ToList();
+    
+    private void GoToPage(int p)
+    {
+        Console.WriteLine($"GoToPage called with page={p}, currentPage={currentPage}, TotalPages={TotalPages}, TotalItems={TotalItems}");
+        
+        // Validate the page number
+        if (p < 1 || p > TotalPages)
+        {
+            Console.WriteLine($"Page {p} is out of range (1-{TotalPages})");
+            return;
+        }
+    
+        // Update the current page
+        currentPage = p;
+        Console.WriteLine($"Updated currentPage to {currentPage}");
+    
+        // Force re-render
+        StateHasChanged();
+    }
+
+    private void ClearFilters()
+    {
+        SearchText = string.Empty;
+        SelectedStatus = "All";
+        currentPage = 1;
     }
 
     private void OpenLaunch(string id)
