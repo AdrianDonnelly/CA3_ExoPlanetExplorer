@@ -5,19 +5,15 @@
 <MudContainer Class="mt-8">
     <MudText Typo="Typo.h4" GutterBottom="true">Launch Statistics</MudText>
 
-    @if (loading)
-    {
+    @if (loading){
         <div class="d-flex justify-center align-center" style="min-height: 400px;">
-            <MudProgressCircular Indeterminate="true" Size="Size.Large" />
+            <MudProgressCircular Indeterminate="true" Size="Size.Large"/>
         </div>
     }
-    else if (launches == null || !launches.Any())
-    {
+    else if (launches == null || !launches.Any()){
         <MudAlert Severity="Severity.Info">No launch data available</MudAlert>
     }
-    else
-    {
-        <!-- Summary Cards -->
+    else{
         <MudGrid Spacing="3" Class="mb-6">
             <MudItem xs="12" sm="6" md="3">
                 <MudPaper Class="pa-4" Elevation="2">
@@ -48,9 +44,7 @@
             </MudItem>
         </MudGrid>
 
-        <!-- Charts -->
         <MudGrid Spacing="3">
-            <!-- Launch Outcomes Pie Chart -->
             <MudItem xs="12" md="6">
                 <MudPaper Class="pa-4" Elevation="2">
                     <MudText Typo="Typo.h6" Class="mb-4">Launch Outcomes</MudText>
@@ -60,13 +54,12 @@
                               InputLabels="@OutcomeLabels"
                               Width="100%"
                               Height="350px"
-                              ChartOptions="@outcomeChartOptions" />
+                              ChartOptions="@outcomeChartOptions"/>
 
                 </MudPaper>
-                
+
             </MudItem>
 
-            <!-- Launches Per Year Bar Chart -->
             <MudItem xs="12" md="6">
                 <MudPaper Class="pa-4" Elevation="2">
                     <MudText Typo="Typo.h6" Class="mb-4">Launches Per Year</MudText>
@@ -75,10 +68,10 @@
                               XAxisLabels="@YearLabels"
                               Width="100%"
                               Height="350px"
-                              ChartOptions="@barChartOptions" />
+                              ChartOptions="@barChartOptions"/>
                 </MudPaper>
             </MudItem>
-            
+
         </MudGrid>
     }
 </MudContainer>
